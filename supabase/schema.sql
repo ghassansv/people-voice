@@ -236,6 +236,12 @@ on public.signatures for select
 to authenticated
 using (public.is_admin());
 
+drop policy if exists "Admins delete signatures" on public.signatures;
+create policy "Admins delete signatures"
+on public.signatures for delete
+to authenticated
+using (public.is_admin());
+
 drop policy if exists "Users read own admin membership" on public.admin_users;
 create policy "Users read own admin membership"
 on public.admin_users for select
@@ -250,7 +256,7 @@ revoke all on public.admin_users from anon, authenticated;
 grant select on public.campaigns to anon, authenticated;
 grant select, insert, update, delete on public.campaigns to authenticated;
 grant select on public.campaign_versions to authenticated;
-grant select on public.signatures to authenticated;
+grant select, delete on public.signatures to authenticated;
 grant select on public.admin_users to authenticated;
 
 revoke all on function public.is_admin() from public;

@@ -20,6 +20,7 @@ const adminVersion = document.querySelector("#admin-version");
 const adminSupportCount = document.querySelector("#admin-support-count");
 const signaturesBody = document.querySelector("#signatures-body");
 const signaturesEmpty = document.querySelector("#signatures-empty");
+const signatureMessage = document.querySelector("#signature-message");
 const signatureSearch = document.querySelector("#signature-search");
 const exportButton = document.querySelector("#export-button");
 
@@ -111,12 +112,21 @@ function renderSignatures(rows) {
 
   for (const signature of rows) {
     const row = document.createElement("tr");
+    const actionCell = document.createElement("td");
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "delete-signature-button";
+    deleteButton.dataset.signatureId = signature.id;
+    deleteButton.textContent = "حذف";
+    deleteButton.setAttribute("aria-label", `حذف تسجيل ${signature.full_name}`);
+    actionCell.append(deleteButton);
     row.append(
       createCell(signature.full_name),
       createCell(signature.mobile),
       createCell(signature.address),
       createCell(numberFormatter.format(signature.campaign_version)),
       createCell(dateFormatter.format(new Date(signature.created_at))),
+      actionCell,
     );
     signaturesBody.append(row);
   }
@@ -212,6 +222,50 @@ signatureSearch?.addEventListener("input", () => {
         .some((value) => value.toLocaleLowerCase("ar").includes(term)),
     ),
   );
+});
+
+signaturesBody?.addEventListener("click", async (event) => {
+  const button = event.target.closest(".delete-signature-button");
+  if (!button) return;
+
+  const signature = recentSignatures.find((row) => row.id === button.dataset.signatureId);
+  if (!signature) return;
+
+  const details = [signature.full_name, signature.mobile, dateFormatter.format(new Date(signature.created_at))]
+    .filter(Boolean)
+    .join(" — ");
+  if (!window.confirm(`هل تريد حذف هذا التسجيل نهائيًا؟\n${details}\nلا يمكن التراجع عن الحذف.`)) return;
+
+  hideMessage(signatureMessage);
+  button.disabled = true;
+  button.textContent = "جارٍ الحذف…";
+  let deleted = false;
+
+  try {
+    const { data, error } = await supabase
+      .from("signatures")
+      .delete()
+      .eq("id", signature.id)
+      .select("id")
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) throw new Error("SIGNATURE_NOT_DELETED");
+    deleted = true;
+    await loadDashboard();
+    setMessage(signatureMessage, `تم حذف تسجيل ${signature.full_name}.`, "success");
+  } catch (error) {
+    console.error("Signature deletion failed", error);
+    setMessage(
+      signatureMessage,
+      deleted
+        ? "تم الحذف، لكن تعذّر تحديث القائمة. أعد تحميل الصفحة."
+        : "تعذّر حذف التسجيل. تحقق من صلاحية الحذف في Supabase وحاول مجددًا.",
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = "حذف";
+  }
 });
 
 function csvCell(value) {
