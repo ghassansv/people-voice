@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="شارك صوتك وأضف تأييدك للرسالة." />
+    <meta name="theme-color" content="#102a43" />
+    <title>صوت الناس</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23102a43'/%3E%3Cpath d='M18 22h28v18H31l-9 7v-7h-4z' fill='%232ec4a6'/%3E%3Cpath d='M25 28h14M25 34h9' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="الصفحة الرئيسية لصوت الناس">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" role="img"><path d="M7 9h26v18H19l-8 6v-6H7z"/><path class="brand-lines" d="M13 16h14M13 21h9"/></svg>
+        </span>
+        <span>صوت الناس</span>
+      </a>
+      <span class="campaign-status" id="campaign-status"><i aria-hidden="true"></i><span>جارٍ تحميل الحملة</span></span>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro-panel" aria-labelledby="campaign-title">
+        <div class="intro-copy">
+          <p class="eyebrow">رسالة مجتمعية</p>
+          <h1 id="campaign-title">معًا ليصل صوتنا بوضوح</h1>
+          <p class="intro-text">اقرأ الرسالة، ثم أضف اسمك إذا كنت تؤيد مضمونها. لن تظهر معلوماتك الشخصية للعامة.</p>
+        </div>
+
+        <div class="support-meter" aria-label="عدد المشاركين">
+          <span class="support-number" id="support-count">—</span>
+          <span class="support-label">شخصًا أضافوا أصواتهم</span>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <article class="letter-card" aria-labelledby="letter-heading">
+          <header class="card-heading">
+            <span class="icon-box" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 7l8 6 8-6"/></svg>
+            </span>
+            <div>
+              <p class="section-kicker">نص الرسالة</p>
+              <h2 id="letter-heading">إلى ممثلينا وصنّاع القرار</h2>
+            </div>
+          </header>
+
+          <div class="letter-body" id="letter-body">
+            <p>نحن الموقّعين أدناه، نطلب الاستماع إلى مطالب المجتمع ومناقشتها بشفافية، والعمل على اتخاذ خطوات عملية تحقق المصلحة العامة.</p>
+            <p>نؤمن بأن الحوار المباشر والمشاركة المدنية أساس القرارات العادلة، ونأمل تحديد لقاء معلن لعرض الخطوات القادمة ومتابعتها.</p>
+          </div>
+
+          <footer class="letter-meta">
+            <span>آخر تحديث: <time id="updated-at" datetime="2026-09-19">19 سبتمبر 2026</time></span>
+            <span id="letter-version">نسخة الرسالة 1</span>
+          </footer>
+        </article>
+
+        <section class="signup-card" aria-labelledby="signup-heading">
+          <div class="card-heading compact">
+            <span class="step-number" aria-hidden="true">١</span>
+            <div>
+              <p class="section-kicker">أضف صوتك</p>
+              <h2 id="signup-heading">سجّل تأييدك</h2>
+            </div>
+          </div>
+
+          <form id="support-form" novalidate>
+            <div class="field-group">
+              <label for="full-name">الاسم الكامل <span aria-hidden="true">*</span></label>
+              <input id="full-name" name="fullName" type="text" autocomplete="name" required minlength="2" maxlength="100" placeholder="اكتب اسمك الكامل" />
+              <p class="field-error" id="full-name-error"></p>
+            </div>
+
+            <div class="field-group">
+              <label for="mobile">رقم الهاتف <small>اختياري</small></label>
+              <input id="mobile" name="mobile" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" placeholder="مثال: 07XXXXXXXX" />
+            </div>
+
+            <div class="field-group">
+              <label for="address">المدينة أو العنوان <small>اختياري</small></label>
+              <input id="address" name="address" type="text" autocomplete="address-level2" maxlength="180" placeholder="اكتب المدينة أو المنطقة" />
+            </div>
+
+            <label class="consent-row" for="consent">
+              <input id="consent" name="consent" type="checkbox" required />
+              <span>قرأت الرسالة وأوافق على تسجيل تأييدي وحفظ بياناتي لهذا الغرض.</span>
+            </label>
+            <p class="field-error" id="consent-error"></p>
+
+            <button class="primary-button" id="submit-button" type="submit">
+              <span>تسجيل تأييدي</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+
+            <p class="privacy-note">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2M5 10h14v10H5z"/></svg>
+              بياناتك لا تُعرض للعامة ولا تُستخدم خارج هذه الحملة.
+            </p>
+          </form>
+
+          <div class="form-message" id="form-message" role="status" aria-live="polite" hidden></div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>مبادرة مستقلة لجمع أصوات المجتمع باحترام وشفافية.</p>
+      <div class="footer-links">
+        <a href="./privacy.html">سياسة الخصوصية</a>
+        <a href="./admin.html">دخول المسؤول</a>
+      </div>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#102a43" />
+    <title>إدارة الحملة | صوت الناس</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23102a43'/%3E%3Cpath d='M18 22h28v18H31l-9 7v-7h-4z' fill='%232ec4a6'/%3E%3Cpath d='M25 28h14M25 34h9' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body class="admin-body">
+    <header class="site-header admin-header">
+      <a class="brand" href="./" aria-label="العودة إلى الصفحة العامة">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" role="img"><path d="M7 9h26v18H19l-8 6v-6H7z"/><path class="brand-lines" d="M13 16h14M13 21h9"/></svg>
+        </span>
+        <span>إدارة صوت الناس</span>
+      </a>
+      <div class="admin-actions" id="admin-actions" hidden>
+        <a class="text-button" href="./" target="_blank">عرض الصفحة العامة</a>
+        <button class="text-button danger-text" id="logout-button" type="button">تسجيل الخروج</button>
+      </div>
+    </header>
+
+    <main class="admin-shell">
+      <section class="login-card" id="setup-panel" hidden>
+        <span class="login-icon" aria-hidden="true">!</span>
+        <h1>يلزم ربط Supabase</h1>
+        <p>أدخل رابط المشروع والمفتاح العام في ملف <code>dist/config.js</code> ثم أعد تحميل الصفحة.</p>
+      </section>
+
+      <section class="login-card" id="login-panel">
+        <span class="login-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2M5 10h14v10H5z"/></svg>
+        </span>
+        <p class="section-kicker">منطقة محمية</p>
+        <h1>دخول المسؤول</h1>
+        <p>استخدم حساب المسؤول الذي أنشأته في Supabase.</p>
+
+        <form id="login-form">
+          <div class="field-group">
+            <label for="admin-email">البريد الإلكتروني</label>
+            <input id="admin-email" name="email" type="email" autocomplete="username" required placeholder="name@example.com" />
+          </div>
+          <div class="field-group">
+            <label for="admin-password">كلمة المرور</label>
+            <input id="admin-password" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••" />
+          </div>
+          <button class="primary-button" id="login-button" type="submit"><span>تسجيل الدخول</span></button>
+          <div class="form-message" id="login-message" role="status" aria-live="polite" hidden></div>
+        </form>
+      </section>
+
+      <section class="dashboard" id="dashboard" hidden>
+        <div class="dashboard-heading">
+          <div>
+            <p class="section-kicker">لوحة الإدارة</p>
+            <h1>إدارة الحملة</h1>
+            <p id="admin-identity" class="muted"></p>
+          </div>
+          <div class="summary-card">
+            <span class="summary-value" id="admin-support-count">٠</span>
+            <span>إجمالي المشاركين</span>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <section class="admin-card" aria-labelledby="editor-title">
+            <div class="admin-card-heading">
+              <div>
+                <p class="section-kicker">المحتوى العام</p>
+                <h2 id="editor-title">الرسالة وإعدادات التسجيل</h2>
+              </div>
+              <span class="version-badge" id="admin-version">النسخة —</span>
+            </div>
+
+            <form id="campaign-form">
+              <div class="field-group">
+                <label for="campaign-headline">عنوان الحملة</label>
+                <input id="campaign-headline" type="text" required maxlength="160" />
+              </div>
+              <div class="field-group">
+                <label for="letter-title-input">عنوان الرسالة</label>
+                <input id="letter-title-input" type="text" required maxlength="180" />
+              </div>
+              <div class="field-group">
+                <label for="letter-body-input">نص الرسالة</label>
+                <textarea id="letter-body-input" required maxlength="10000" rows="12"></textarea>
+                <p class="field-help">استخدم سطرًا فارغًا للفصل بين الفقرات. أي تعديل على النص ينشئ نسخة جديدة تلقائيًا.</p>
+              </div>
+
+              <label class="switch-row" for="campaign-open">
+                <span>
+                  <strong>استقبال تسجيلات جديدة</strong>
+                  <small>عند الإيقاف تبقى الرسالة ظاهرة لكن لا يمكن التسجيل.</small>
+                </span>
+                <input id="campaign-open" type="checkbox" role="switch" />
+              </label>
+
+              <button class="primary-button" id="save-campaign-button" type="submit"><span>حفظ التغييرات</span></button>
+              <div class="form-message" id="campaign-message" role="status" aria-live="polite" hidden></div>
+            </form>
+          </section>
+
+          <section class="admin-card signatures-card" aria-labelledby="signatures-title">
+            <div class="admin-card-heading signatures-heading">
+              <div>
+                <p class="section-kicker">البيانات الخاصة</p>
+                <h2 id="signatures-title">المشاركون</h2>
+              </div>
+              <button class="secondary-button" id="export-button" type="button">تنزيل Excel / CSV</button>
+            </div>
+
+            <label class="search-field" for="signature-search">
+              <span class="sr-only">البحث في المشاركين</span>
+              <input id="signature-search" type="search" placeholder="ابحث بالاسم أو الهاتف أو العنوان" />
+            </label>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>الاسم</th>
+                    <th>الهاتف</th>
+                    <th>العنوان</th>
+                    <th>نسخة الرسالة</th>
+                    <th>تاريخ التسجيل</th>
+                  </tr>
+                </thead>
+                <tbody id="signatures-body"></tbody>
+              </table>
+              <p class="empty-state" id="signatures-empty" hidden>لا توجد تسجيلات حتى الآن.</p>
+            </div>
+            <p class="field-help">تظهر أحدث 100 مشاركة هنا. ملف التصدير يشمل جميع المشاركات.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./admin.js"></script>
+  </body>
+</html>
